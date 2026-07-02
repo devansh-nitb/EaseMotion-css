@@ -138,7 +138,8 @@ function minifyCss(css) {
     .replace(/\r\n/g, "\n")
     .replace(/\n+/g, "\n")
     .replace(/\s+/g, " ")
-    .replace(/\s*([{}:;,>])\s*/g, "$1")
+    .replace(/\s*([{};,>])\s*/g, "$1")
+    .replace(/:\s+/g, ":")
     .replace(/;}/g, "}")
     .replace(/\)\s+\{/g, "){")
     .trim();
@@ -159,9 +160,6 @@ async function build() {
 
   await mkdir(path.dirname(outputFile), { recursive: true });
   await writeFile(outputFile, `${minifiedCss}\n`, "utf8");
-
-  const docsOutputFile = path.join(rootDir, "docs", "easemotion.min.css");
-  await writeFile(docsOutputFile, `${minifiedCss}\n`, "utf8");
 
   const summary = {
     entry: path.relative(rootDir, entryFile),
